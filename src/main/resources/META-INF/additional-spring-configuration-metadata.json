@@ -1,0 +1,7 @@
+{"properties": [
+  {
+    "name": "HUGGGINGFACE_API_KEY",
+    "type": "java.lang.String",
+    "description": "API Key for hugging face models"
+  }
+]}

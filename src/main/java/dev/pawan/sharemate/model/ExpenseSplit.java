@@ -1,0 +1,33 @@
+package dev.pawan.sharemate.model;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.math.BigDecimal;
+
+@Entity
+@Table(name = "EXPENSE_SPLITS")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class ExpenseSplit {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+//    @ManyToOne
+//    @JoinColumn(name = "expense_id", nullable = false)
+    @Column(name = "expense_id", nullable = false)
+    private Integer expenseId;
+
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
+
+    @Column(nullable = false)
+    private BigDecimal amountOwed;
+    
+    @Column(nullable =false)
+    private Character paid; 
+}
