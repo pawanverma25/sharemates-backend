@@ -1,10 +1,16 @@
 package dev.pawan.sharemate.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
-import java.util.Set;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "GROUP_DETAILS")
@@ -16,21 +22,17 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
-    private String groupUid;
-
     @Column(nullable = false)
     private String name;
 
     private String description;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by", nullable = false)
-    private User createdBy;
+    @Column(name = "created_by", nullable = false)
+    private Integer createdBy;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdDate = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private Set<GroupMember> members;
+//    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
+//    private Set<GroupMember> members;
 }

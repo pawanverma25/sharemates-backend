@@ -15,13 +15,11 @@ public class GroupMember {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
-    private Group group;
+    @Column(name = "group_id", nullable = false)
+    private Integer groupId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime joinedAt = LocalDateTime.now();

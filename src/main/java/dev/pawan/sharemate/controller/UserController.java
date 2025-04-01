@@ -1,6 +1,5 @@
 package dev.pawan.sharemate.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -31,13 +30,9 @@ public class UserController {
     @Autowired
     EmailVerificationService emailVerificationTokenService;
 
-    @GetMapping("/exists/{username}")
+    @GetMapping("/exists/{email}")
     public ResponseEntity<Map<String, Boolean>> checkExistance(@PathVariable String email) {
-        return ResponseEntity.status(HttpStatus.OK).body(new HashMap<String, Boolean>() {
-            {
-                put("exists", userService.checkExistance(email));
-            }
-        });
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("exists", userService.checkExistance(email)));
     }
 
     @PostMapping("/register")
