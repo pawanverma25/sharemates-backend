@@ -1,15 +1,20 @@
 package dev.pawan.sharemate.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
 
-import dev.pawan.sharemate.enums.ExpenseCategory;
 import dev.pawan.sharemate.enums.SplitType;
-import dev.pawan.sharemate.response.UserDTO;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "EXPENSES")
@@ -22,10 +27,7 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
-    private String expenseUid;
-
-//    @ManyToOne
+//    @ManyToOne	
 //    @JoinColumn(name = "group_id")
     private Integer groupId;
 //
