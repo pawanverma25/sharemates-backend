@@ -1,5 +1,7 @@
 package dev.pawan.sharemate.response;
 
+import java.math.BigDecimal;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +10,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BalanceDTO {
-	private Integer id;
-	private Integer friendId;
-	private String friendName;
-	private Double amount;
+    private Integer id;
+    private Integer friendId;
+    private String friendName;
+    private BigDecimal amount;
 }

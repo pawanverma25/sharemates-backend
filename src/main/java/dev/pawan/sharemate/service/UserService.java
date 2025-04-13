@@ -20,8 +20,8 @@ import io.jsonwebtoken.JwtException;
 
 @Service
 public class UserService {
-	
-	private Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepo;
@@ -34,21 +34,21 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder encoder;
-    
-    public AuthResponseDTO registerUser(RegisterRequest request) throws Exception{
-    	User user = new User();
-    	user.setEmail(request.getEmail());
-    	user.setName(request.getName());
-    	user.setPassword(encoder.encode(request.getPassword()));
+
+    public AuthResponseDTO registerUser(RegisterRequest request) throws Exception {
+        User user = new User();
+        user.setEmail(request.getEmail());
+        user.setName(request.getName());
+        user.setPassword(encoder.encode(request.getPassword()));
         User savedUser = userRepo.save(user);
-        
+
         Optional<String> token = verify(request.getEmail(), request.getPassword());
-        
-        if(!token.isPresent()) {
-        	userRepo.delete(savedUser);
-        	throw new JwtException("token is not generated");
+
+        if (!token.isPresent()) {
+            userRepo.delete(savedUser);
+            throw new JwtException("token is not generated");
         }
-        
+
         AuthResponseDTO response = new AuthResponseDTO("Registration Successful",
                 UserMapper.INSTANCE.toDto(savedUser), token.get(), 60000);
         return response;
@@ -58,7 +58,7 @@ public class UserService {
         String token = null;
         encoder.encode(password);
         Authentication authentication = authenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+                .authenticate(new UsernamePasswordAuthenticationToken(email, password));
         if (authentication.isAuthenticated()) {
             token = jwtService.generateToken(email);
         }
@@ -82,5 +82,4 @@ public class UserService {
         return null;
     }
 
-    
 }

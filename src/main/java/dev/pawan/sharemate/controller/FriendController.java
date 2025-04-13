@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import dev.pawan.sharemate.response.UserDTO;
+import dev.pawan.sharemate.response.FriendDTO;
 import dev.pawan.sharemate.service.FriendService;
 import lombok.RequiredArgsConstructor;
 
@@ -17,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/")
 public class FriendController {
-	
-	private final FriendService friendService;
-	
+
+    private final FriendService friendService;
+
     @GetMapping("/getFriends/{userId}")
-    public ResponseEntity<List<UserDTO>> getFriendsByUserId(@PathVariable Integer userId) {
+    public ResponseEntity<List<FriendDTO>> getFriendsByUserId(@PathVariable Integer userId) {
         return ResponseEntity.status(HttpStatus.OK).body(friendService.getFriendsByUserId(userId));
     }
 }

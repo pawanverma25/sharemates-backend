@@ -1,8 +1,10 @@
 package dev.pawan.sharemate.response;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+
+import dev.pawan.sharemate.enums.FriendStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,11 +12,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GroupDTO {
+@Component
+public class FriendDTO {
     private Integer id;
     private String name;
-    private String description;
-    private Integer createdBy;
-    private BigDecimal amountOwed;
-    private LocalDateTime createdDate;
+    private String uid;
+    private String email;
+    private FriendStatus status;
+    private BigDecimal balance;
 }

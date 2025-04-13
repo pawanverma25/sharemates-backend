@@ -1,9 +1,7 @@
 package dev.pawan.sharemate.service;
 
-import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +12,6 @@ import dev.pawan.sharemate.model.EmailVerification;
 import dev.pawan.sharemate.model.User;
 import dev.pawan.sharemate.repository.EmailVerificationRepo;
 import dev.pawan.sharemate.repository.UserRepository;
-import dev.pawan.sharemate.service.EmailService;
-import dev.pawan.sharemate.util.ConstantsUtil;
 
 @Service
 public class EmailVerificationService {
@@ -30,7 +26,7 @@ public class EmailVerificationService {
     private UserRepository userRepo;
 
     public VerificationStatus sendVerificationEmail(User user) {
-        String verificationCode = "" + (int)(Math.random()* 1e6);
+        String verificationCode = "" + (int) (Math.random() * 1e6);
         LocalDateTime expiryTime = LocalDateTime.now().plusMinutes(60);
         EmailVerification emailVerification = new EmailVerification();
         emailVerification.setVerificationCode(verificationCode);

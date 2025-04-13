@@ -2,8 +2,6 @@ package dev.pawan.sharemate.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +13,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ExpenseService {
 
-	private final ExpenseRepository expenseRepo;
-	
-	public List<ExpenseDTO> getExpensesByUserId(Integer userId, Pageable pageable){
-		return expenseRepo.findAllByUserId(userId, pageable);
-	}
-	
+    private final ExpenseRepository expenseRepo;
+
+    public List<ExpenseDTO> getExpensesByUserId(Integer userId, Pageable pageable) {
+        return expenseRepo.findAllByUserId(userId, pageable);
+    }
+
 }
