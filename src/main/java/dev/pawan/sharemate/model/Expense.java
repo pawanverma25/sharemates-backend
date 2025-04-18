@@ -56,7 +56,7 @@ public class Expense {
     private Integer paidBy;
     
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String expenseCategory;
 
 //    @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
