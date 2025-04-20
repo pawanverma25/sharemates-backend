@@ -1,7 +1,7 @@
 package dev.pawan.sharemate.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.sql.Date;
 
 import dev.pawan.sharemate.enums.SplitType;
 import jakarta.persistence.Column;
@@ -22,17 +22,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Expense {
-	
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    @ManyToOne	
-//    @JoinColumn(name = "group_id")
+    // @ManyToOne
+    // @JoinColumn(name = "group_id")
     private Integer groupId;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "created_by", nullable = false)
+    //
+    // @ManyToOne
+    // @JoinColumn(name = "created_by", nullable = false)
     @Column(name = "created_by", nullable = false)
     private Integer createdBy;
 
@@ -43,10 +43,10 @@ public class Expense {
     private BigDecimal amount;
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdDate = LocalDateTime.now();
-    
+    private Date createdDate = new Date(System.currentTimeMillis());
+
     @Column(insertable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
-    private LocalDateTime modifiedDate;
+    private Date modifiedDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -54,11 +54,10 @@ public class Expense {
 
     @Column(nullable = false)
     private Integer paidBy;
-    
 
     @Column(nullable = true)
     private String expenseCategory;
 
-//    @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
-//    private Set<ExpenseSplit> expenseSplits;
+    // @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
+    // private Set<ExpenseSplit> expenseSplits;
 }

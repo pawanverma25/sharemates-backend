@@ -15,9 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -39,7 +36,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/register", "/api/login", "/api/exists/**", "/api/verify-email/**", "/download")
+                        .requestMatchers("/api/register", "/api/login", "/api/exists/**", "/api/verify-email/**",
+                                "/download")
                         .permitAll()
                         .anyRequest()
                         .authenticated())
@@ -50,19 +48,21 @@ public class SecurityConfig {
                 .build();
     }
 
-//    @Bean
-//    public CorsFilter corsFilter() {
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.addAllowedOrigin("http://localhost:3000"); // Allow the frontend application
-//        config.addAllowedMethod("*"); // Allow all HTTP methods
-//        config.addAllowedHeader("*"); // Allow all headers
-//        config.setAllowCredentials(true); // Allow credentials (cookies, authorization headers)
-//
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
-//    }
-    
+    // @Bean
+    // public CorsFilter corsFilter() {
+    // CorsConfiguration config = new CorsConfiguration();
+    // config.addAllowedOrigin("http://localhost:3000"); // Allow the frontend
+    // application
+    // config.addAllowedMethod("*"); // Allow all HTTP methods
+    // config.addAllowedHeader("*"); // Allow all headers
+    // config.setAllowCredentials(true); // Allow credentials (cookies,
+    // authorization headers)
+    //
+    // UrlBasedCorsConfigurationSource source = new
+    // UrlBasedCorsConfigurationSource();
+    // source.registerCorsConfiguration("/**", config);
+    // return new CorsFilter(source);
+    // }
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
