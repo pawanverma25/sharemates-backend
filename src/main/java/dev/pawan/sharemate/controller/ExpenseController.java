@@ -26,33 +26,28 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ExpenseController {
 
-	private final ExpenseService expenseService;
-	private final ExpenseSplitService expenseSplitService;
+    private final ExpenseService expenseService;
+    private final ExpenseSplitService expenseSplitService;
 
-	@GetMapping("/expenses")
-	public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@RequestParam Integer userId, @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable){
-		return ResponseEntity.status(HttpStatus.OK).body(expenseService.getExpensesByUserId(userId, pageable));
-	}
-	
-	@PostMapping("/addExpenses")
-	public void addExpenses(@RequestBody ExpenseRequestDTO request) {
-		
-		//saving in expense table
-		try {
-			Expense exp = expenseService.saveExpense(request);
-			System.out.println("expense is saved"+exp);
-			List<ParticipantsDTO> participants = request.getParticipants();
-			expenseSplitService.saveExpenseSplit(participants,exp);
-			System.out.println("expense split is saved"+exp);
-			
-			
-			
-			
-		}catch (IllegalStateException e) {
-			e.printStackTrace();
-		} 
-		
-		
-		
-	}
+    @GetMapping("/expenses")
+    public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@RequestParam Integer userId,
+            @PageableDefault(size = Integer.MAX_VALUE) Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(expenseService.getExpensesByUserId(userId, pageable));
+    }
+
+    @PostMapping("/addExpenses")
+    public ResponseEntity<Boolean> addExpenses(@RequestBody ExpenseRequestDTO request) {
+        // saving in expense table
+        try {
+            Expense exp = expenseService.saveExpense(request);
+            System.out.println("expense is saved " + exp);
+            List<ParticipantsDTO> participants = request.getParticipants();
+            Boolean response = expenseSplitService.saveExpenseSplit(participants, exp);
+            System.out.println("expense split is saved " + exp);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Boolean.FALSE);
+    }
 }
