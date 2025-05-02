@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.pawan.sharemate.model.Group;
+import dev.pawan.sharemate.request.AddMemberRequestDTO;
 import dev.pawan.sharemate.request.GroupRequestDTO;
 import dev.pawan.sharemate.response.GroupDTO;
 import dev.pawan.sharemate.response.UserDTO;
@@ -36,8 +38,14 @@ public class GroupController {
 	}
 	
 	@PostMapping("/createGroup")
-	public ResponseEntity<Object> createGroup(@RequestBody GroupRequestDTO groupRequestDTO){
-		return ResponseEntity.status(HttpStatus.OK).body(null);
+	public ResponseEntity<Object> createGroup(@RequestBody Group groupRequest){
+		return ResponseEntity.status(HttpStatus.OK).body(groupService.createGroup(groupRequest));
 	}
+	
+	@PostMapping("/addMembersToGroup")
+	public ResponseEntity<Object> addMembersToGroup(@RequestBody AddMemberRequestDTO addMemberRequestDTO){
+		return ResponseEntity.status(HttpStatus.OK).body(groupService.addMembersToGroup(addMemberRequestDTO));
+	}
+	
 
 }
