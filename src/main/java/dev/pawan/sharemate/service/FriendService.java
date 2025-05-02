@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import dev.pawan.sharemate.model.Friend;
 import dev.pawan.sharemate.repository.FriendRepository;
 import dev.pawan.sharemate.response.FriendDTO;
 import lombok.RequiredArgsConstructor;
@@ -17,4 +18,10 @@ public class FriendService {
         return friendRepository.getFriendsByUserId(userId);
     }
 
+	public Friend addFriend(Friend friend) {
+		return friendRepository.save(friend);
+		
+	}
+
 }
+ 
