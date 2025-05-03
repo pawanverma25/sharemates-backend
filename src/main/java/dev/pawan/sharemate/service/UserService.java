@@ -13,6 +13,7 @@ import dev.pawan.sharemate.mapper.UserMapper;
 import dev.pawan.sharemate.model.User;
 import dev.pawan.sharemate.repository.UserRepository;
 import dev.pawan.sharemate.request.RegisterRequest;
+import dev.pawan.sharemate.request.UserDTO;
 import dev.pawan.sharemate.response.AuthResponseDTO;
 import io.jsonwebtoken.JwtException;
 
@@ -81,4 +82,21 @@ public class UserService {
             return savedUser;
         return null;
     }
+
+	public Boolean updateUser(UserDTO user) {
+		Optional<User> founduser = userRepo.findById(user.getId());
+		if(founduser.isPresent()) {
+			User existingUser = founduser.get();
+			if(user.getName()!=null)
+			existingUser.setName(user.getName());
+			if(user.getEmail()!=null)
+			existingUser.setEmail(user.getEmail());
+			if(user.getUsername()!=null)
+			existingUser.setUsername(user.getUsername());
+			userRepo.save(existingUser);
+			return true;
+		}else {
+			return false;
+		}	
+	}
 }

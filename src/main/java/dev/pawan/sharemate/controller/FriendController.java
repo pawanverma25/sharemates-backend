@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import dev.pawan.sharemate.model.Friend;
+import dev.pawan.sharemate.model.User;
+import dev.pawan.sharemate.request.UserDTO;
 import dev.pawan.sharemate.response.FriendDTO;
 import dev.pawan.sharemate.service.FriendService;
 import lombok.RequiredArgsConstructor;
@@ -32,4 +34,10 @@ public class FriendController {
     public ResponseEntity<Friend> asddFriend(@RequestBody Friend friend) {
         return ResponseEntity.status(HttpStatus.OK).body(friendService.addFriend(friend));
     }
+    
+    @GetMapping("/searchFriend/{username}")
+    public ResponseEntity<UserDTO> searchFriend(@PathVariable String username){
+    	return ResponseEntity.status(HttpStatus.OK).body(friendService.searchFriend(username));
+    }
+    
 }
