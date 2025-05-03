@@ -1,6 +1,7 @@
 package dev.pawan.sharemate.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.pawan.sharemate.model.Group;
 import dev.pawan.sharemate.request.AddMemberRequestDTO;
+import dev.pawan.sharemate.request.GroupRequestDTO;
 import dev.pawan.sharemate.response.GroupDTO;
 import dev.pawan.sharemate.response.UserDTO;
 import dev.pawan.sharemate.service.GroupService;
@@ -43,6 +45,11 @@ public class GroupController {
     @PostMapping("/addMembersToGroup")
     public ResponseEntity<Object> addMembersToGroup(@RequestBody AddMemberRequestDTO addMemberRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(groupService.addMembersToGroup(addMemberRequestDTO));
+    }
+    
+    @PostMapping("/updateGroup")
+    public ResponseEntity<Map<String,Boolean>> updateGroup(@RequestBody GroupRequestDTO groupRequestDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("updated",groupService.updateGroup(groupRequestDTO)));
     }
 
 }
