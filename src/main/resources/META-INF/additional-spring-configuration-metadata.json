@@ -3,5 +3,10 @@
     "name": "HUGGGINGFACE_API_KEY",
     "type": "java.lang.String",
     "description": "API Key for hugging face models"
+  },
+  {
+    "name": "HUGGINGFACE_API_KEY",
+    "type": "java.lang.String",
+    "description": "A description for 'HUGGINGFACE_API_KEY'"
   }
 ]}

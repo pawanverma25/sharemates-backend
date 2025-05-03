@@ -13,7 +13,7 @@ import dev.pawan.sharemate.response.FriendDTO;
 public interface FriendRepository extends JpaRepository<Friend, Integer> {
 
     @Query("""
-            		SELECT new dev.pawan.sharemate.response.FriendDTO(u.id, u.name, u.uid, u.email, f.status, b.amount)
+            		SELECT new dev.pawan.sharemate.response.FriendDTO(u.id, u.name, u.username, u.email, f.status, b.amount)
             		FROM Friend f
             		JOIN User u on f.friendId = u.id
                     JOIN Balance b on b.user.id = :userId and b.friend.id = u.id

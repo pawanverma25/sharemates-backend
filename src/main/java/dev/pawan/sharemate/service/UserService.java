@@ -67,8 +67,12 @@ public class UserService {
         return savedUser;
     }
 
-    public Boolean checkExistance(String email) {
+    public Boolean checkEmailExistance(String email) {
         return userRepo.existsByEmail(email);
+    }
+
+    public Boolean checkUsernameExistance(String username) {
+        return userRepo.existsByUsername(username);
     }
 
     public User getUserDetails(String email) {
@@ -77,5 +81,4 @@ public class UserService {
             return savedUser;
         return null;
     }
-
 }

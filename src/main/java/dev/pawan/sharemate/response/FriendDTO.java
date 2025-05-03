@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class FriendDTO {
     private Integer id;
     private String name;
-    private String uid;
+    private String username;
     private String email;
     private FriendStatus status;
     private BigDecimal balance;

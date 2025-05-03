@@ -12,11 +12,11 @@ import dev.pawan.sharemate.response.UserDTO;
 
 @Repository
 public interface GroupMemberRepository extends JpaRepository<GroupMember, Integer> {
-	@Query("""
-			select new dev.pawan.sharemate.response.UserDTO(u.id, u.name, u.uid, u.email)
-			From GroupMember gm
-			Join User u
-			on u.id = gm.userId and gm.groupId =:groupId
-			""")
-	public List<UserDTO> getGroupMembersByGroupId(@Param("groupId") int groupId);
+    @Query("""
+            select new dev.pawan.sharemate.response.UserDTO(u.id, u.name, u.username, u.email)
+            From GroupMember gm
+            Join User u
+            on u.id = gm.userId and gm.groupId =:groupId
+            """)
+    public List<UserDTO> getGroupMembersByGroupId(@Param("groupId") int groupId);
 }

@@ -11,13 +11,13 @@ import dev.pawan.sharemate.model.ExpenseSplit;
 import dev.pawan.sharemate.response.ExpenseSplitDTO;
 
 @Repository
-public interface ExpenseSplitRepository extends JpaRepository<ExpenseSplit, Integer>{
-	
-	@Query("SELECT new dev.pawan.sharemate.response.ExpenseSplitDTO(es.id, es.expenseId, "
-			+ "new dev.pawan.sharemate.response.UserDTO(u.id, u.name, u.uid, u.email), "
-			+ "es.amountOwed, es.paid) "
-			+ "FROM ExpenseSplit es "
-			+ "JOIN User u on es.userId = u.id "
-			+ "and es.expenseId = :expenseId")
-	public List<ExpenseSplitDTO> getExpenseSplit(@Param("expenseId") Integer expenseId);
+public interface ExpenseSplitRepository extends JpaRepository<ExpenseSplit, Integer> {
+
+    @Query("SELECT new dev.pawan.sharemate.response.ExpenseSplitDTO(es.id, es.expenseId, "
+            + "new dev.pawan.sharemate.response.UserDTO(u.id, u.name, u.username, u.email), "
+            + "es.amountOwed, es.paid) "
+            + "FROM ExpenseSplit es "
+            + "JOIN User u on es.userId = u.id "
+            + "and es.expenseId = :expenseId")
+    public List<ExpenseSplitDTO> getExpenseSplit(@Param("expenseId") Integer expenseId);
 }

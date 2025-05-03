@@ -15,10 +15,10 @@ public interface ExpenseRepository extends JpaRepository<Expense, Integer> {
     @Query("""
                 SELECT distinct new dev.pawan.sharemate.response.ExpenseDTO(
                     e.id, g.id, g.name,
-                    new dev.pawan.sharemate.response.UserDTO(u1.id, u1.name, u1.uid, u1.email),
+                    new dev.pawan.sharemate.response.UserDTO(u1.id, u1.name, u1.username, u1.email),
                     e.description, e.amount, e.createdDate, e.modifiedDate, e.splitType,
                     CASE WHEN e.paidBy = es.userId THEN es.amountOwed - e.amount ELSE es.amountOwed END,
-                    new dev.pawan.sharemate.response.UserDTO(u2.id, u2.name, u2.uid, u2.email),
+                    new dev.pawan.sharemate.response.UserDTO(u2.id, u2.name, u2.username, u2.email),
                     e.expenseCategory
                 )
                 FROM Expense e

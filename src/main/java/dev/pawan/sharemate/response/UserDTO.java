@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Component
 public class UserDTO {
-	private Integer id;
-	private String name;
-	private String uid;
-	private String email;
+    private Integer id;
+    private String name;
+    private String username;
+    private String email;
 }

@@ -1,7 +1,6 @@
 package dev.pawan.sharemate.model;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,7 +23,7 @@ public class User {
     private Integer id;
 
     @Column(nullable = false, unique = true)
-    private String uid = UUID.randomUUID().toString();
+    private String username;
 
     @Column(nullable = false, unique = true)
     private String email;

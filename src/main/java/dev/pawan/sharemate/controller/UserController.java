@@ -30,22 +30,27 @@ public class UserController {
     @Autowired
     EmailVerificationService emailVerificationTokenService;
 
-    @GetMapping("/exists/{email}")
-    public ResponseEntity<Map<String, Boolean>> checkExistance(@PathVariable String email) {
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of("exists", userService.checkExistance(email)));
+    @GetMapping("/emailexists/{email}")
+    public ResponseEntity<Map<String, Boolean>> checkEmailExistance(@PathVariable String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("exists", userService.checkEmailExistance(email)));
+    }
+
+    @GetMapping("/usernameexists/{username}")
+    public ResponseEntity<Map<String, Boolean>> checkUsernameExistance(@PathVariable String email) {
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("exists", userService.checkEmailExistance(email)));
     }
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> register(@RequestBody RegisterRequest request) {
         AuthResponseDTO response = null;
-		try {
-			response = userService.registerUser(request);
-		} catch (Exception e) {
-			e.printStackTrace();
-	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-	                new AuthResponseDTO("Registration failed: " + e.getMessage(), null, null, null));
-		}
-		return ResponseEntity.status(HttpStatus.OK)
+        try {
+            response = userService.registerUser(request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
+                    new AuthResponseDTO("Registration failed: " + e.getMessage(), null, null, null));
+        }
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }
 
