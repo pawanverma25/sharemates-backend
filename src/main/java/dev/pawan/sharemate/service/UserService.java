@@ -23,6 +23,9 @@ public class UserService {
     private UserRepository userRepo;
 
     @Autowired
+    private EmailVerificationService emailVerificationTokenService;
+
+    @Autowired
     private JwtService jwtService;
 
     @Autowired
@@ -33,10 +36,13 @@ public class UserService {
 
     public AuthResponseDTO registerUser(RegisterRequest request) throws Exception {
         User user = new User();
-        user.setEmail(request.getEmail());
         user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setUsername(request.getUsername());
         user.setPassword(encoder.encode(request.getPassword()));
         User savedUser = userRepo.save(user);
+
+        emailVerificationTokenService.sendVerificationEmail(savedUser);
 
         Optional<String> token = verify(request.getEmail(), request.getPassword());
 
@@ -46,7 +52,7 @@ public class UserService {
         }
 
         AuthResponseDTO response = new AuthResponseDTO("Registration Successful",
-                UserMapper.INSTANCE.toDto(savedUser), token.get(), 60000);
+                UserMapper.INSTANCE.toDto(savedUser), token.get(), 60000, savedUser.getEmailVerified());
         return response;
     }
 
@@ -76,9 +82,12 @@ public class UserService {
     }
 
     public User getUserDetails(String email) {
-        User savedUser = userRepo.findByEmail(email);
-        if (savedUser != null)
-            return savedUser;
-        return null;
+        User savedUser = userRepo.findByEmail(email).orElse(null);
+        return savedUser;
+    }
+
+    public User getUserDetails(Integer userId) {
+        User savedUser = userRepo.findById(userId).orElse(null);
+        return savedUser;
     }
 }

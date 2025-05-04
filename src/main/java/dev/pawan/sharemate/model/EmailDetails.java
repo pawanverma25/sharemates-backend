@@ -11,5 +11,6 @@ public class EmailDetails {
     private String recipient;
     private String subject;
     private String messageBody;
+    private Boolean isHtml;
     private String attachment;
 }

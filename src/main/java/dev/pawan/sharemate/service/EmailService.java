@@ -5,7 +5,6 @@ import java.io.File;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -28,22 +27,19 @@ public class EmailService {
 
         try {
 
-            // Creating a simple mail message
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-            // Setting up necessary details
-            mailMessage.setFrom(sender);
-            mailMessage.setTo(details.getRecipient());
-            mailMessage.setText(details.getMessageBody());
-            mailMessage.setSubject(details.getSubject());
+            mimeMessageHelper.setFrom(sender);
+            mimeMessageHelper.setTo(details.getRecipient());
+            mimeMessageHelper.setText(details.getMessageBody(), details.getIsHtml());
+            mimeMessageHelper.setSubject(details.getSubject());
 
             // Sending the mail
-            javaMailSender.send(mailMessage);
+            javaMailSender.send(mimeMessage);
             return VerificationStatus.PENDING;
-        }
-
-        // Catch block to handle the exceptions
-        catch (Exception e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return VerificationStatus.FAILED;
         }
     }
@@ -53,16 +49,14 @@ public class EmailService {
     public VerificationStatus sendMailWithAttachment(EmailDetails details) {
         // Creating a mime message
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper;
+        MimeMessageHelper mimeMessageHelper = null;
 
         try {
 
-            // Setting multipart as true for attachments to
-            // be send
             mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
             mimeMessageHelper.setFrom(sender);
             mimeMessageHelper.setTo(details.getRecipient());
-            mimeMessageHelper.setText(details.getMessageBody());
+            mimeMessageHelper.setText(details.getMessageBody(), details.getIsHtml());
             mimeMessageHelper.setSubject(
                     details.getSubject());
 
@@ -76,12 +70,8 @@ public class EmailService {
             // Sending the mail
             javaMailSender.send(mimeMessage);
             return VerificationStatus.PENDING;
-        }
-
-        // Catch block to handle MessagingException
-        catch (MessagingException e) {
-
-            // Display message when exception occurred
+        } catch (MessagingException e) {
+            e.printStackTrace();
             return VerificationStatus.FAILED;
         }
     }

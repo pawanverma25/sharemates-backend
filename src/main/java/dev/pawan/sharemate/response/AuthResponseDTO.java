@@ -12,4 +12,5 @@ public class AuthResponseDTO {
     private UserDTO user;
     private String authorization;
     private Integer expiresIn;
+    private Character emailVerified;
 }

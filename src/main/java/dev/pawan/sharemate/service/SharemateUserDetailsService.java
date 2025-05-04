@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-
 import dev.pawan.sharemate.config.UserPrinciples;
 import dev.pawan.sharemate.model.User;
 import dev.pawan.sharemate.repository.UserRepository;
@@ -19,7 +18,7 @@ public class SharemateUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(email);
+        User user = userRepo.findByEmail(email).orElse(null);
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
