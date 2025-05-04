@@ -18,6 +18,7 @@ import dev.pawan.sharemate.model.User;
 import dev.pawan.sharemate.request.EmailVerificationRequest;
 import dev.pawan.sharemate.request.LoginRequest;
 import dev.pawan.sharemate.request.RegisterRequest;
+import dev.pawan.sharemate.request.UserDTO;
 import dev.pawan.sharemate.response.AuthResponseDTO;
 import dev.pawan.sharemate.service.EmailVerificationService;
 import dev.pawan.sharemate.service.UserService;
@@ -40,6 +41,11 @@ public class UserController {
     public ResponseEntity<Map<String, Boolean>> checkUsernameExistance(@PathVariable String username) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(Map.of("exists", userService.checkUsernameExistance(username)));
+    }
+
+    @PostMapping("/updateUser")
+    public ResponseEntity<Map<String, Boolean>> updateUser(@RequestBody UserDTO user) {
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of("updated", userService.updateUser(user)));
     }
 
     @PostMapping("/register")

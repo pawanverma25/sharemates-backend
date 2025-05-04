@@ -3,9 +3,10 @@ package dev.pawan.sharemate.request;
 import lombok.Data;
 
 @Data
-public class GroupRequestDTO {
+public class UserDTO {
 
 	private Integer id;
+	private String username;
+	private String email;
 	private String name;
-	private String description;
 }

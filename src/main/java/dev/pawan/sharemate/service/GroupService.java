@@ -3,14 +3,17 @@ package dev.pawan.sharemate.service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import dev.pawan.sharemate.model.Group;
 import dev.pawan.sharemate.model.GroupMember;
+import dev.pawan.sharemate.model.User;
 import dev.pawan.sharemate.repository.GroupMemberRepository;
 import dev.pawan.sharemate.repository.GroupRepository;
 import dev.pawan.sharemate.request.AddMemberRequestDTO;
+import dev.pawan.sharemate.request.GroupRequestDTO;
 import dev.pawan.sharemate.response.GroupDTO;
 import dev.pawan.sharemate.response.UserDTO;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +50,21 @@ public class GroupService {
 		res.put("message", "All friends added to group");
 		
 		return res;
+	}
+
+	public Boolean updateGroup(GroupRequestDTO groupRequestDTO) {
+		Optional<Group> foundGroup = groupRepository.findById(groupRequestDTO.getId());
+		if(foundGroup.isPresent()) {
+			Group existingGroup = foundGroup.get();
+			if(groupRequestDTO.getName()!=null)
+			 existingGroup.setName(groupRequestDTO.getName());
+			if(groupRequestDTO.getDescription()!=null)
+				existingGroup.setDescription(groupRequestDTO.getDescription());
+			groupRepository.save(existingGroup);
+			return true;
+		}else {
+			return false;
+		}	
 	}
 
 }
