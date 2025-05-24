@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import dev.pawan.sharemate.enums.SplitType;
 import dev.pawan.sharemate.model.Expense;
 import dev.pawan.sharemate.repository.ExpenseRepository;
+import dev.pawan.sharemate.repository.ExpenseSplitRepository;
 import dev.pawan.sharemate.request.ExpenseRequestDTO;
+import dev.pawan.sharemate.request.ParticipantsDTO;
 import dev.pawan.sharemate.response.ExpenseDTO;
 import lombok.RequiredArgsConstructor;
 
@@ -50,5 +52,33 @@ public class ExpenseService {
         return savedExpense;
 
     }
+
+	public Expense updateExpense(ExpenseRequestDTO request) {
+		Integer expenseId = request.getExpenseId();
+		String desc = request.getDescription();
+        Date date = request.getCreatedDate();
+        Integer paidBy = request.getPaidBy();
+        Integer groupId = request.getGroupId();
+        Integer createdBy = request.getCreatedBy();
+        BigDecimal totalAmount = request.getAmount();
+        SplitType splitType = request.getSplitType();
+        Expense savedExpense = new Expense();
+        try {
+            Expense exp = new Expense();
+            exp.setId(expenseId);
+            exp.setAmount(totalAmount);
+            exp.setCreatedBy(createdBy);
+            exp.setCreatedDate(date);
+            exp.setDescription(desc);
+            exp.setPaidBy(paidBy);
+            exp.setSplitType(splitType);
+            exp.setGroupId(groupId);
+            savedExpense = expenseRepo.save(exp);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		return savedExpense;
+		
+	}
 
 }

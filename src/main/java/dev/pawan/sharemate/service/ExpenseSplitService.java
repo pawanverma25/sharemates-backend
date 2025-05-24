@@ -1,7 +1,11 @@
 package dev.pawan.sharemate.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -72,5 +76,71 @@ public class ExpenseSplitService {
         }
         return Boolean.TRUE;
     }
+
+	public Boolean addFriendtoExpenseSplit(List<ParticipantsDTO> participants, Expense exp) {
+		for(ParticipantsDTO participant: participants) {
+			Optional<ExpenseSplit> optionalEntity = expenseSplitRepo.findByUserIdAndExpenseId(participant.getId(),exp.getId());
+			if (optionalEntity.isPresent()) {
+				ExpenseSplit expenseSplit =  optionalEntity.get();
+				BigDecimal previousAmount = expenseSplit.getAmountOwed();
+				BigDecimal newAmount = participant.getAmount();
+				expenseSplit.setAmountOwed(participant.getAmount());
+				BigDecimal settleAmt = previousAmount.subtract(newAmount);
+				expenseSplitRepo.save(expenseSplit);
+				balanceRepository.updateAmount(exp.getPaidBy(), participant.getId(),settleAmt.multiply(BigDecimal.valueOf(-1)));
+                balanceRepository.updateAmount(participant.getId(), exp.getPaidBy(),settleAmt);
+	        } else {
+	        	ExpenseSplit expenseSplit = new ExpenseSplit();
+                expenseSplit.setExpenseId(exp.getId());
+                expenseSplit.setUserId(participant.getId());
+                expenseSplit.setAmountOwed(participant.getAmount());
+                expenseSplit.setPaid(exp.getPaidBy() == participant.getId() ? 'Y' : 'N');
+                expenseSplitRepo.save(expenseSplit);
+                Balance betweenUserAndFriend = new Balance();
+                Balance betweenFriendAndUser = new Balance();
+                User user = new User();
+                User friend = new User();
+                user.setId(exp.getPaidBy());
+                friend.setId(participant.getId());
+                betweenUserAndFriend.setUser(user);
+                betweenUserAndFriend.setFriend(friend);
+                betweenUserAndFriend.setAmount(participant.getAmount());
+                balanceRepository.save(betweenUserAndFriend);
+                user.setId(participant.getId());
+                friend.setId(exp.getPaidBy());
+                betweenFriendAndUser.setUser(user);
+                betweenFriendAndUser.setFriend(friend);
+                betweenFriendAndUser.setAmount(participant.getAmount().multiply(BigDecimal.valueOf(-1)));
+                balanceRepository.save(betweenFriendAndUser);
+	        }
+		}
+		return Boolean.TRUE;
+	}
+
+	public Boolean removeFriendtoExpenseSplit(List<ParticipantsDTO> participants,List<ParticipantsDTO> existingParticipants, Expense exp) {
+		Set<Integer> idsInParticipants = participants.stream().map(ParticipantsDTO::getId).collect(Collectors.toSet());
+		List<ParticipantsDTO> diffId = existingParticipants.stream().filter(obj -> !idsInParticipants.contains(obj.getId())).collect(Collectors.toList());
+		for(ParticipantsDTO p : diffId) {
+			BigDecimal previousAmount = p.getAmount();
+			balanceRepository.updateAmount(exp.getPaidBy(), p.getId(),previousAmount.multiply(BigDecimal.valueOf(-1)));
+            balanceRepository.updateAmount(p.getId(), exp.getPaidBy(),previousAmount);
+			expenseSplitRepo.deleteByExpenseIdAndUserId(exp.getId(), p.getId());
+		}
+		for(ParticipantsDTO participant : participants){
+			Optional<ExpenseSplit> optionalEntity = expenseSplitRepo.findByUserIdAndExpenseId(participant.getId(),exp.getId());
+			if (optionalEntity.isPresent()) {
+				ExpenseSplit expenseSplit =  optionalEntity.get();
+				BigDecimal previousAmount = expenseSplit.getAmountOwed();
+				BigDecimal newAmount = participant.getAmount();
+				expenseSplit.setAmountOwed(participant.getAmount());
+				BigDecimal settleAmt = previousAmount.subtract(newAmount);
+				expenseSplitRepo.save(expenseSplit);
+				balanceRepository.updateAmount(exp.getPaidBy(), participant.getId(),settleAmt.multiply(BigDecimal.valueOf(-1)));
+                balanceRepository.updateAmount(participant.getId(), exp.getPaidBy(),settleAmt);
+	        }
+		}
+		
+		return Boolean.TRUE;
+	}
 
 }

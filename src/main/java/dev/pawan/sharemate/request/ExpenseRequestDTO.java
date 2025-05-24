@@ -9,7 +9,8 @@ import lombok.Data;
 
 @Data
 public class ExpenseRequestDTO {
-
+	
+	Integer expenseId;
     String description;
     Date createdDate;
     Integer paidBy;
