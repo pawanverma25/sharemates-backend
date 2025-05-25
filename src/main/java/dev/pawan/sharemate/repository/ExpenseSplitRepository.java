@@ -20,11 +20,6 @@ public interface ExpenseSplitRepository extends JpaRepository<ExpenseSplit, Inte
  
 	Optional<ExpenseSplit> findByUserIdAndExpenseId(Integer userId,Integer expenseId);
 	
-	@Transactional
-	@Modifying
-	@Query("DELETE FROM ExpenseSplit e WHERE e.expenseId = :expenseId AND e.userId = :userId")
-	void deleteByExpenseIdAndUserId(@Param("expenseId") Integer expenseId, @Param("userId") Integer userId);
-	
     @Query("SELECT new dev.pawan.sharemate.response.ExpenseSplitDTO(es.id, es.expenseId, "
             + "new dev.pawan.sharemate.response.UserDTO(u.id, u.name, u.username, u.email), "
             + "es.amountOwed, es.paid) "
@@ -38,4 +33,6 @@ public interface ExpenseSplitRepository extends JpaRepository<ExpenseSplit, Inte
     		+ "FROM ExpenseSplit es "
     		+ "where es.expenseId = :expenseId")
 	public List<ParticipantsDTO> getExistingParticipants(@Param("expenseId") Integer expenseId);
+
+	void deleteByUserIdAndExpenseId(Integer id, Integer id2);
 }

@@ -29,7 +29,6 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
     private final ExpenseSplitService expenseSplitService;
-    private final ExpenseSplitRepository expenseSplitRepository;
 
     @GetMapping("/expenses")
     public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@RequestParam Integer userId,
@@ -55,22 +54,7 @@ public class ExpenseController {
     
     @PostMapping("/editExpenses")
     public ResponseEntity<Boolean> updateExpense(@RequestBody ExpenseRequestDTO request){
-    	Expense exp = expenseService.updateExpense(request);
-    	System.out.println("expense is saved " + exp);
-    	List<ParticipantsDTO> participants = request.getParticipants();
-    	Integer expenseId = request.getExpenseId();
-		List<ParticipantsDTO> existingParticipants = expenseSplitRepository.getExistingParticipants(expenseId);
-		Boolean response = Boolean.FALSE;
-		if(participants.size()>existingParticipants.size()) {
-			System.out.println("Addition of Friend in expense");
-			 response = expenseSplitService.addFriendtoExpenseSplit(participants,exp);
-		}else if(participants.size()<existingParticipants.size()) {
-			System.out.println("Removal of Friend in expense");
-			 response = expenseSplitService.removeFriendtoExpenseSplit(participants,existingParticipants,exp);
-		}else {
-			System.out.println("Expense edit of Friend");
-			 response = expenseSplitService.addFriendtoExpenseSplit(participants,exp);
-		}
+		Boolean response = expenseSplitService.updateExpenses(request);
 		if(response) return ResponseEntity.status(HttpStatus.OK).body(response);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Boolean.FALSE);
 		
