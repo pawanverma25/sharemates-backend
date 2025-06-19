@@ -111,7 +111,6 @@ public class ExpenseSplitService {
             balanceRepository.updateAmount(p.getId(), exp.getPaidBy(),previousAmount);
             expenseSplitRepo.deleteByUserIdAndExpenseId(p.getId(),exp.getId());
 		}
-		addFriendtoExpenseSplit(participants,exp);
 		return Boolean.TRUE;
 	}
 
@@ -122,16 +121,8 @@ public class ExpenseSplitService {
 		List<ParticipantsDTO> participants = request.getParticipants();
     	Integer expenseId = request.getExpenseId();
 		List<ParticipantsDTO> existingParticipants = expenseSplitRepository.getExistingParticipants(expenseId);
-		if(participants.size()>existingParticipants.size()) {
-			System.out.println("Addition of Friend in expense");
-			 addFriendtoExpenseSplit(participants,exp);
-		}else if(participants.size()<existingParticipants.size()) {
-			System.out.println("Removal of Friend in expense");
-			 removeFriendtoExpenseSplit(participants,existingParticipants,exp);
-		}else {
-			System.out.println("Expense edit of Friend");
-			addFriendtoExpenseSplit(participants,exp);
-		}
+		addFriendtoExpenseSplit(participants,exp);
+		removeFriendtoExpenseSplit(participants,existingParticipants,exp);
 		return Boolean.TRUE;
 		
 	}
