@@ -96,7 +96,13 @@ public class ExpenseSplitService {
                 balanceRepository.updateAmount(participant.getId(), exp.getPaidBy(),settleAmt);
 	        } else {
 	        	createExpense(participant,exp);
-	        	settleBalancesBetweenUserAndFriend(participant,exp);
+	        	Balance count = balanceRepository.findByUserIdAndFriendId(exp.getPaidBy(), participant.getId());
+                if (count != null) {
+                    balanceRepository.updateAmount(exp.getPaidBy(), participant.getId(),participant.getAmount());
+                    balanceRepository.updateAmount(participant.getId(), exp.getPaidBy(),participant.getAmount().multiply(BigDecimal.valueOf(-1)));
+                } else if (exp.getPaidBy() != participant.getId()) {
+                	settleBalancesBetweenUserAndFriend(participant,exp);
+                }
 	        }
 		}
 		return Boolean.TRUE;
@@ -115,8 +121,8 @@ public class ExpenseSplitService {
 	}
 
 	@Transactional
-	public Boolean updateExpenses(ExpenseRequestDTO request) {
-		Expense exp = expenseService.updateExpense(request);
+	public Boolean updateExpenses(ExpenseRequestDTO request,String category) {
+		Expense exp = expenseService.updateExpense(request,category);
     	System.out.println("expense is saved " + exp);
 		List<ParticipantsDTO> participants = request.getParticipants();
     	Integer expenseId = request.getExpenseId();

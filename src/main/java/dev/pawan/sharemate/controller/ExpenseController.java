@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.pawan.sharemate.model.Expense;
+import dev.pawan.sharemate.model.ExpenseCategory;
+import dev.pawan.sharemate.repository.ExpCategoryRepository;
 import dev.pawan.sharemate.repository.ExpenseSplitRepository;
 import dev.pawan.sharemate.request.ExpenseRequestDTO;
 import dev.pawan.sharemate.request.ParticipantsDTO;
 import dev.pawan.sharemate.response.ExpenseDTO;
 import dev.pawan.sharemate.service.ExpenseService;
 import dev.pawan.sharemate.service.ExpenseSplitService;
+import dev.pawan.sharemate.service.HuggingFaceService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -29,6 +32,8 @@ public class ExpenseController {
 
     private final ExpenseService expenseService;
     private final ExpenseSplitService expenseSplitService;
+    private final ExpCategoryRepository expCategoryRepository;
+    private final HuggingFaceService huggingFaceService;
 
     @GetMapping("/expenses")
     public ResponseEntity<List<ExpenseDTO>> getExpensesByUserId(@RequestParam Integer userId,
@@ -37,24 +42,30 @@ public class ExpenseController {
     }
 
     @PostMapping("/addExpenses")
-    public ResponseEntity<Boolean> addExpenses(@RequestBody ExpenseRequestDTO request) {
+    public ResponseEntity<Expense> addExpenses(@RequestBody ExpenseRequestDTO request) {
         // saving in expense table
+    	Expense exp = new Expense();
         try {
-            Expense exp = expenseService.saveExpense(request);
+        	List<String> expcategory = expCategoryRepository.getAllCategory();
+        	String category = huggingFaceService.huggingFaceAPICall(request.getDescription(), expcategory);
+            exp = expenseService.saveExpense(request,category);
             System.out.println("expense is saved " + exp);
             List<ParticipantsDTO> participants = request.getParticipants();
             Boolean response = expenseSplitService.saveExpenseSplit(participants, exp);
             System.out.println("expense split is saved " + exp);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return ResponseEntity.status(HttpStatus.OK).body(exp);
         } catch (IllegalStateException e) {
             e.printStackTrace();
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Boolean.FALSE);
+        }return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exp);
+        
+        
     }
     
     @PostMapping("/editExpenses")
     public ResponseEntity<Boolean> updateExpense(@RequestBody ExpenseRequestDTO request){
-		Boolean response = expenseSplitService.updateExpenses(request);
+    	List<String> expcategory = expCategoryRepository.getAllCategory();
+    	String category = huggingFaceService.huggingFaceAPICall(request.getDescription(), expcategory);
+		Boolean response = expenseSplitService.updateExpenses(request,category);
 		if(response) return ResponseEntity.status(HttpStatus.OK).body(response);
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Boolean.FALSE);
 		
