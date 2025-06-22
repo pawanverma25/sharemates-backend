@@ -36,7 +36,7 @@ public class GroupService {
         return groupRepository.save(groupRequest);
     }
 
-    public Object addMembersToGroup(AddMemberRequestDTO addMemberRequestDTO) {
+    public Map<String, String> addMembersToGroup(AddMemberRequestDTO addMemberRequestDTO) {
         List<Integer> friendList = addMemberRequestDTO.getFriendList();
         for (int i = 0; i < friendList.size(); i++) {
             GroupMember groupMember = new GroupMember();
@@ -65,5 +65,10 @@ public class GroupService {
             return false;
         }
     }
+
+	public GroupDTO getGroupDetailsByGroupId(Integer groupId) {
+        Optional<Group> foundGroup = groupRepository.findById(groupId);
+        return foundGroup.map(GroupDTO::new).orElse(null);
+	}
 
 }

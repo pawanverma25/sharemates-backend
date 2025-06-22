@@ -31,6 +31,12 @@ public class GroupController {
     public ResponseEntity<List<GroupDTO>> getGroupsByUserId(@PathVariable Integer userId) {
         return ResponseEntity.status(HttpStatus.OK).body(groupService.getGroupsByUserId(userId));
     }
+    
+
+    @GetMapping("/getGroupDetails/{groupId}")
+    public ResponseEntity<GroupDTO> getGroupDetails(@PathVariable Integer groupId) {
+        return ResponseEntity.status(HttpStatus.OK).body(groupService.getGroupDetailsByGroupId(groupId));
+    }
 
     @GetMapping("/getGroupMembers/{groupId}")
     public ResponseEntity<List<UserDTO>> getGroupMembersByGroupId(@PathVariable Integer groupId) {
@@ -38,12 +44,12 @@ public class GroupController {
     }
 
     @PostMapping("/createGroup")
-    public ResponseEntity<Object> createGroup(@RequestBody Group groupRequest) {
+    public ResponseEntity<Group> createGroup(@RequestBody Group groupRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(groupService.createGroup(groupRequest));
     }
 
     @PostMapping("/addMembersToGroup")
-    public ResponseEntity<Object> addMembersToGroup(@RequestBody AddMemberRequestDTO addMemberRequestDTO) {
+    public ResponseEntity<Map<String, String>> addMembersToGroup(@RequestBody AddMemberRequestDTO addMemberRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(groupService.addMembersToGroup(addMemberRequestDTO));
     }
     
