@@ -1,7 +1,6 @@
 package dev.pawan.sharemate.service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import dev.pawan.sharemate.model.Balance;
 import dev.pawan.sharemate.model.Expense;
 import dev.pawan.sharemate.model.ExpenseSplit;
-import dev.pawan.sharemate.model.User;
 import dev.pawan.sharemate.repository.BalanceRepository;
 import dev.pawan.sharemate.repository.ExpenseSplitRepository;
 import dev.pawan.sharemate.request.ExpenseRequestDTO;
@@ -47,18 +45,12 @@ public class ExpenseSplitService {
     public void settleBalancesBetweenUserAndFriend(ParticipantsDTO participant,Expense exp) {
     	Balance betweenUserAndFriend = new Balance();
         Balance betweenFriendAndUser = new Balance();
-        User user = new User();
-        User friend = new User();
-        user.setId(exp.getPaidBy());
-        friend.setId(participant.getId());
-        betweenUserAndFriend.setUser(user);
-        betweenUserAndFriend.setFriend(friend);
+        betweenUserAndFriend.setUserId(exp.getPaidBy());
+        betweenUserAndFriend.setFriendId(participant.getId());
         betweenUserAndFriend.setAmount(participant.getAmount());
         balanceRepository.save(betweenUserAndFriend);
-        user.setId(participant.getId());
-        friend.setId(exp.getPaidBy());
-        betweenFriendAndUser.setUser(user);
-        betweenFriendAndUser.setFriend(friend);
+        betweenFriendAndUser.setUserId(participant.getId());
+        betweenFriendAndUser.setFriendId(exp.getPaidBy());
         betweenFriendAndUser.setAmount(participant.getAmount().multiply(BigDecimal.valueOf(-1)));
         balanceRepository.save(betweenFriendAndUser);
     }

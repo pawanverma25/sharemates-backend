@@ -30,60 +30,16 @@ public class ExpenseService {
     }
 
     public Expense saveExpense(ExpenseRequestDTO request,String category) {
-
-        String desc = request.getDescription();
-        Date date = request.getCreatedDate();
-        Integer paidBy = request.getPaidBy();
-        Integer groupId = request.getGroupId();
-        Integer createdBy = request.getCreatedBy();
-        BigDecimal totalAmount = request.getAmount();
-        SplitType splitType = request.getSplitType();
-        Expense savedExpense = new Expense();
-        try {
-            Expense exp = new Expense();
-            exp.setAmount(totalAmount);
-            exp.setCreatedBy(createdBy);
-            exp.setCreatedDate(date);
-            exp.setDescription(desc);
-            exp.setPaidBy(paidBy);
-            exp.setSplitType(splitType);
-            exp.setGroupId(groupId);
-            exp.setExpenseCategory(category);
-            savedExpense = expenseRepo.save(exp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return savedExpense;
+        Expense exp = new Expense(request);
+        exp.setExpenseCategory(category);
+        return expenseRepo.save(exp);
 
     }
 
 	public Expense updateExpense(ExpenseRequestDTO request,String category) {
-		Integer expenseId = request.getExpenseId();
-		String desc = request.getDescription();
-        Date date = request.getCreatedDate();
-        Integer paidBy = request.getPaidBy();
-        Integer groupId = request.getGroupId();
-        Integer createdBy = request.getCreatedBy();
-        BigDecimal totalAmount = request.getAmount();
-        SplitType splitType = request.getSplitType();
-        Expense savedExpense = new Expense();
-        try {
-            Expense exp = new Expense();
-            exp.setId(expenseId);
-            exp.setAmount(totalAmount);
-            exp.setCreatedBy(createdBy);
-            exp.setCreatedDate(date);
-            exp.setDescription(desc);
-            exp.setPaidBy(paidBy);
-            exp.setSplitType(splitType);
-            exp.setGroupId(groupId);
-            exp.setExpenseCategory(category);
-            savedExpense = expenseRepo.save(exp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		return savedExpense;
-		
+        Expense exp = new Expense(request);
+        exp.setExpenseCategory(category);
+        return expenseRepo.save(exp);
 	}
 	
 

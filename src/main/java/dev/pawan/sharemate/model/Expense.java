@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 import dev.pawan.sharemate.enums.SplitType;
+import dev.pawan.sharemate.request.ExpenseRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -60,4 +61,14 @@ public class Expense {
 
     // @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
     // private Set<ExpenseSplit> expenseSplits;
+    
+    public Expense(ExpenseRequestDTO request) {
+		this.description = request.getDescription();
+		this.createdDate = request.getCreatedDate();
+		this.paidBy = request.getPaidBy();
+		this.groupId = request.getGroupId();
+		this.createdBy = request.getCreatedBy();
+		this.amount = request.getAmount();
+		this.splitType = request.getSplitType();
+	}
 }

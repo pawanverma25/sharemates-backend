@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import dev.pawan.sharemate.enums.FriendStatus;
 import dev.pawan.sharemate.model.Friend;
 import dev.pawan.sharemate.request.FriendRequestDTO;
 import dev.pawan.sharemate.response.FriendDTO;
@@ -38,6 +39,12 @@ public class FriendController {
     public ResponseEntity<Friend> addFriend(@RequestBody FriendRequestDTO friendRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(friendService.addFriend(friendRequest));
     }
+    
+    @PostMapping("/updateFriendRequest/")
+    public ResponseEntity<Friend> updateFriendRequest(@RequestBody FriendRequestDTO friendRequest) {
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(friendService.updateFriendRequest(friendRequest));
+	}
 
     @GetMapping("/searchFriends/{userId}/{searchQuery}")
     public ResponseEntity<List<FriendDTO>> searchFriend(@PathVariable String searchQuery,

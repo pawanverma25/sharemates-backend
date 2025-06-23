@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BalanceDTO {
-    private Integer id;
     private Integer friendId;
     private String friendName;
     private BigDecimal amount;

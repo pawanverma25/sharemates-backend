@@ -11,17 +11,20 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import dev.pawan.sharemate.model.Balance;
+import dev.pawan.sharemate.response.BalanceDTO;
 
 @Repository
 public interface BalanceRepository extends JpaRepository<Balance, Integer> {
-	List<Balance> findByUserId(Integer userId);
 	
-	Balance findByUserIdAndFriendId(Integer userId,Integer friendId);
+	@Query("SELECT new dev.pawan.sharemate.response.BalanceDTO(b.friendId, u.name, b.amount) FROM Balance b join User u on u.id=b.friendId WHERE b.userId = :userId")
+	List<BalanceDTO> getBalancesByUserId( @Param("userId")Integer userId);
+
+	Balance findByUserIdAndFriendId(Integer userId, Integer friendId);
 
 	@Modifying
-    @Transactional
-    @Query("UPDATE Balance SET amount = amount + :amount WHERE user.id = :paidBy and friend.id = :borrowedBy")
-	void updateAmount(@Param("paidBy") Integer paidBy,@Param("borrowedBy")  Integer borrowedBy,@Param("amount")  BigDecimal amount);
-
+	@Transactional
+	@Query("UPDATE Balance SET amount = amount + :amount WHERE userId = :paidBy and friendId = :borrowedBy")
+	void updateAmount(@Param("paidBy") Integer paidBy, @Param("borrowedBy") Integer borrowedBy,
+			@Param("amount") BigDecimal amount);
 
 }

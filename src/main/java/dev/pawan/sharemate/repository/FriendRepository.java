@@ -17,7 +17,7 @@ public interface FriendRepository extends JpaRepository<Friend, Integer> {
                 SELECT new dev.pawan.sharemate.response.FriendDTO(u.id, u.name, u.username, u.email, f.status, b.amount)
                 FROM Friend f
                 JOIN User u on f.friendId = u.id
-                JOIN Balance b on b.user.id = :userId and b.friend.id = u.id
+                JOIN Balance b on b.userId = :userId and b.friendId = u.id
                 and f.userId = :userId
                 order by f.status, u.name
             """)
@@ -41,5 +41,7 @@ public interface FriendRepository extends JpaRepository<Friend, Integer> {
             """)
     public List<FriendDTO> findAllByUsernameOrEmail(@Param("searchQuery") String searchQuery,
             @Param("userId") int userId);
+    
+    public Friend findByUserIdAndFriendId(int userId, int friendId);
 
 }

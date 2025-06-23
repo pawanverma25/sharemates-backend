@@ -24,14 +24,22 @@ public class Balance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+//    @ManyToOne
+//    @JoinColumn(name = "user_id", nullable = false)
+    @Column(name = "USER_ID", nullable = false)
+    private int userId;
 
-    @ManyToOne
-    @JoinColumn(name = "friend_id", nullable = false)
-    private User friend;
+//    @ManyToOne
+//    @JoinColumn(name = "friend_id", nullable = false)
+    @Column(name = "FRIEND_ID", nullable = false)
+    private int friendId;
 
     @Column(nullable = false)
     private BigDecimal amount;
+    
+    public Balance(int userId, int friendId, BigDecimal amount) {
+		this.userId = userId;
+		this.friendId = friendId;
+		this.amount = amount;
+	}
 }
