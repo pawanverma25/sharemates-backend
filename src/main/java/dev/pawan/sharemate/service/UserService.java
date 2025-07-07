@@ -1,8 +1,8 @@
 package dev.pawan.sharemate.service;
 
+import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,102 +10,119 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.pawan.sharemate.mapper.UserMapper;
+import dev.pawan.sharemate.model.Preference;
 import dev.pawan.sharemate.model.User;
+import dev.pawan.sharemate.repository.PreferenceRepository;
 import dev.pawan.sharemate.repository.UserRepository;
 import dev.pawan.sharemate.request.RegisterRequest;
 import dev.pawan.sharemate.request.UserDTO;
 import dev.pawan.sharemate.response.AuthResponseDTO;
 import io.jsonwebtoken.JwtException;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepo;
+	private final UserRepository userRepo;
+	private final PreferenceRepository preferenceRepo;
+	private final EmailVerificationService emailVerificationTokenService;
+	private final JwtService jwtService;
+	private final AuthenticationManager authenticationManager;
+	private final PasswordEncoder encoder;
 
-    @Autowired
-    private EmailVerificationService emailVerificationTokenService;
+	public AuthResponseDTO registerUser(RegisterRequest request) throws Exception {
+		User user = new User();
+		user.setName(request.getName());
+		user.setEmail(request.getEmail());
+		user.setUsername(request.getUsername());
+		user.setPassword(encoder.encode(request.getPassword()));
+		User savedUser = userRepo.save(user);
 
-    @Autowired
-    private JwtService jwtService;
+		emailVerificationTokenService.sendVerificationEmail(savedUser);
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+		Optional<String> token = verify(request.getEmail(), request.getPassword());
 
-    @Autowired
-    private PasswordEncoder encoder;
+		if (!token.isPresent()) {
+			userRepo.delete(savedUser);
+			throw new JwtException("token is not generated");
+		}
 
-    public AuthResponseDTO registerUser(RegisterRequest request) throws Exception {
-        User user = new User();
-        user.setName(request.getName());
-        user.setEmail(request.getEmail());
-        user.setUsername(request.getUsername());
-        user.setPassword(encoder.encode(request.getPassword()));
-        User savedUser = userRepo.save(user);
+		AuthResponseDTO response = new AuthResponseDTO("Registration Successful", UserMapper.INSTANCE.toDto(savedUser),
+				token.get(), 60000, savedUser.getEmailVerified());
+		return response;
+	}
 
-        emailVerificationTokenService.sendVerificationEmail(savedUser);
+	public Optional<String> verify(String email, String password) {
+		String token = null;
+		encoder.encode(password);
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+		if (authentication.isAuthenticated()) {
+			token = jwtService.generateToken(email);
+		}
+		return Optional.ofNullable(token);
+	}
 
-        Optional<String> token = verify(request.getEmail(), request.getPassword());
+	public User register(User user) {
+		user.setPassword(encoder.encode(user.getPassword()));
+		User savedUser = userRepo.save(user);
+		return savedUser;
+	}
 
-        if (!token.isPresent()) {
-            userRepo.delete(savedUser);
-            throw new JwtException("token is not generated");
-        }
+	public Boolean checkEmailExistance(String email) {
+		return userRepo.existsByEmail(email);
+	}
 
-        AuthResponseDTO response = new AuthResponseDTO("Registration Successful",
-                UserMapper.INSTANCE.toDto(savedUser), token.get(), 60000, savedUser.getEmailVerified());
-        return response;
-    }
+	public Boolean checkUsernameExistance(String username) {
+		return userRepo.existsByUsername(username);
+	}
 
-    public Optional<String> verify(String email, String password) {
-        String token = null;
-        encoder.encode(password);
-        Authentication authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(email, password));
-        if (authentication.isAuthenticated()) {
-            token = jwtService.generateToken(email);
-        }
-        return Optional.ofNullable(token);
-    }
+	public User getUserDetails(String email) {
+		User savedUser = userRepo.findByEmail(email).orElse(null);
+		return savedUser;
+	}
 
-    public User register(User user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        User savedUser = userRepo.save(user);
-        return savedUser;
-    }
-
-    public Boolean checkEmailExistance(String email) {
-        return userRepo.existsByEmail(email);
-    }
-
-    public Boolean checkUsernameExistance(String username) {
-        return userRepo.existsByUsername(username);
-    }
-
-    public User getUserDetails(String email) {
-        User savedUser = userRepo.findByEmail(email).orElse(null);
-        return savedUser;
-    }
-
-    public User getUserDetails(Integer userId) {
-        User savedUser = userRepo.findById(userId).orElse(null);
-        return savedUser;
-    }
+	public User getUserDetails(Integer userId) {
+		User savedUser = userRepo.findById(userId).orElse(null);
+		return savedUser;
+	}
 
 	public Boolean updateUser(UserDTO user) {
 		Optional<User> founduser = userRepo.findById(user.getId());
-		if(founduser.isPresent()) {
+		if (founduser.isPresent()) {
 			User existingUser = founduser.get();
-			if(user.getName()!=null)
-			existingUser.setName(user.getName());
-			if(user.getEmail()!=null)
-			existingUser.setEmail(user.getEmail());
-			if(user.getUsername()!=null)
-			existingUser.setUsername(user.getUsername());
+			if (user.getName() != null)
+				existingUser.setName(user.getName());
+			if (user.getEmail() != null)
+				existingUser.setEmail(user.getEmail());
+			if (user.getUsername() != null)
+				existingUser.setUsername(user.getUsername());
 			userRepo.save(existingUser);
 			return true;
-		}else {
+		} else {
 			return false;
-		}	
+		}
+	}
+
+	public Map<String, String> getUserPreferences(Integer userId) {
+		Optional<Preference> preferences = preferenceRepo.findByUserId(userId);
+		return preferences.map(Preference::getUserPreference).orElse(null);
+	}
+
+	public Map<String, String> updateUserPreferences(Integer userId, Map<String, String> preferences) {
+		Optional<Preference> existingPreference = preferenceRepo.findByUserId(userId);
+		if (existingPreference.isPresent()) {
+			Preference preference = existingPreference.get();
+			preference.setUserPreference(preferences);
+			preferenceRepo.save(preference);
+			return preference.getUserPreference();
+		} else {
+			Preference newPreference = new Preference();
+			newPreference.setUserId(userId);
+			newPreference.setUserPreference(preferences);
+			preferenceRepo.save(newPreference);
+			return newPreference.getUserPreference();
+		}
 	}
 }

@@ -66,6 +66,7 @@ public class Expense {
     // private Set<ExpenseSplit> expenseSplits;
     
     public Expense(ExpenseRequestDTO request) {
+    	this.id= request.getExpenseId();
 		this.description = request.getDescription();
 		this.createdDate = request.getCreatedDate();
 		this.paidBy = request.getPaidBy();

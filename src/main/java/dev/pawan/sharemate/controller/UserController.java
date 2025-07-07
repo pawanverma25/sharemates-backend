@@ -123,4 +123,34 @@ public class UserController {
         }
     }
 
+    @GetMapping("/getUserPreferences/{userId}")
+    public ResponseEntity<Map<String, String>> getUserPreferences(@PathVariable Integer userId) {
+		if (userId == null || userId <= 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid User ID"));
+		}
+		try {
+			Map<String, String> preferences = userService.getUserPreferences(userId);
+			return ResponseEntity.status(HttpStatus.OK).body(preferences);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("error", "Failed to get preferences: " + e.getMessage()));
+		}
+	}
+    
+    @PostMapping("/updateUserPreferences/{userId}")
+    public ResponseEntity<Map<String, String>> updateUserPreferences(@PathVariable Integer userId,
+			@RequestBody Map<String, String> preferences) {
+		if (userId == null || userId <= 0) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid User ID"));
+		}
+		try {
+			Map<String, String> updatedPreferences = userService.updateUserPreferences(userId, preferences);
+			return ResponseEntity.status(HttpStatus.OK).body(updatedPreferences);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(Map.of("error", "Failed to update preferences: " + e.getMessage()));
+		}
+	}
 }

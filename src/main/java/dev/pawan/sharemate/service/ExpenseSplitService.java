@@ -115,7 +115,6 @@ public class ExpenseSplitService {
 	@Transactional
 	public Boolean updateExpenses(ExpenseRequestDTO request, String category) {
 		Expense exp = expenseService.updateExpense(request, category);
-		System.out.println("expense is saved " + exp);
 		List<ParticipantsDTO> participants = request.getParticipants();
 		Integer expenseId = request.getExpenseId();
 		List<ParticipantsDTO> existingParticipants = expenseSplitRepository.getExistingParticipants(expenseId);

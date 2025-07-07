@@ -49,6 +49,7 @@ public class FriendService {
             directFriend = new Friend();
             directFriend.setUserId(userId);
             directFriend.setFriendId(friendId);
+            directFriend.setStatus(status);
             directFriend.setCreatedAt(LocalDateTime.now());
         }
         reverseFriend.setModifiedAt(LocalDateTime.now());
