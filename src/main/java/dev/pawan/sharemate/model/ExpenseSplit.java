@@ -1,9 +1,16 @@
 package dev.pawan.sharemate.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.math.BigDecimal;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "EXPENSE_SPLITS")
@@ -28,6 +35,6 @@ public class ExpenseSplit {
     @Column(nullable = false)
     private BigDecimal amountOwed;
     
-    @Column(nullable =false)
-    private Character paid; 
+    @Column(nullable = false)
+    private BigDecimal amountPaid; 
 }

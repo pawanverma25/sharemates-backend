@@ -4,13 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import dev.pawan.sharemate.enums.FriendStatus;
 import dev.pawan.sharemate.model.Friend;
 import dev.pawan.sharemate.repository.FriendRepository;
 import dev.pawan.sharemate.request.FriendRequestDTO;
 import dev.pawan.sharemate.response.FriendDTO;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class FriendService {
     private final FriendRepository friendRepository;
     private final BalanceService balanceService;
+    private final ExpenseService expenseService;
 
     public List<FriendDTO> getFriendsByUserId(int userId) {
         return friendRepository.getFriendsByUserId(userId);
@@ -35,7 +36,7 @@ public class FriendService {
         return friendRepository.save(friend);
     }
     
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class})
     public Friend updateFriendRequest(FriendRequestDTO friendRequest) {
         int userId = friendRequest.getUserId();
         int friendId = friendRequest.getFriendId();
@@ -60,6 +61,17 @@ public class FriendService {
     public List<FriendDTO> searchFriends(String searchQuery, int userId) {
         List<FriendDTO> friends = friendRepository.findAllByUsernameOrEmail(searchQuery, userId);
         return friends;
+    }
+
+    @Transactional(rollbackFor = {IllegalStateException.class})
+	public Boolean settleFriendExpenses(Integer userId, Integer friendId) {
+		Boolean isBalanceSettled = balanceService.settleBalance(userId, friendId);
+		Boolean isExpenseSettled = expenseService.settleExpensesByUserIdAndPaidBy(userId, friendId);
+		if (isBalanceSettled && isExpenseSettled) {
+			return true;
+		} else {
+			throw new IllegalStateException("Failed to settle expenses or balances for user " + userId + " and friend " + friendId);
+		}	
     }
 
 }

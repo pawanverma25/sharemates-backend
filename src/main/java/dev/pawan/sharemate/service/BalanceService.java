@@ -28,4 +28,9 @@ public class BalanceService {
 		Balance balance2 = new Balance(userId2, userId1, BigDecimal.ZERO);
 		balanceRepo.saveAll(List.of(balance1, balance2));
 	}
+	
+	@Transactional
+	public Boolean settleBalance(int userId1, int userId2) {
+		return balanceRepo.settleBalance(userId1, userId2) == 2;
+	}
 }

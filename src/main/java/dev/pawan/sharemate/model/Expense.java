@@ -58,6 +58,9 @@ public class Expense {
 
     @Column(nullable = true)
     private String expenseCategory;
+    
+    @Column(name = "is_active", nullable = false, columnDefinition = "CHAR(1) DEFAULT 'Y'")
+    private Character isActive;
 
     // @OneToMany(mappedBy = "expense", cascade = CascadeType.ALL)
     // private Set<ExpenseSplit> expenseSplits;
@@ -70,5 +73,6 @@ public class Expense {
 		this.createdBy = request.getCreatedBy();
 		this.amount = request.getAmount();
 		this.splitType = request.getSplitType();
+		this.isActive = 'Y';
 	}
 }

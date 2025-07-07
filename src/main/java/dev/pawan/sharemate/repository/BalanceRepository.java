@@ -15,16 +15,22 @@ import dev.pawan.sharemate.response.BalanceDTO;
 
 @Repository
 public interface BalanceRepository extends JpaRepository<Balance, Integer> {
-	
-	@Query("SELECT new dev.pawan.sharemate.response.BalanceDTO(b.friendId, u.name, b.amount) FROM Balance b join User u on u.id=b.friendId WHERE b.userId = :userId")
-	List<BalanceDTO> getBalancesByUserId( @Param("userId")Integer userId);
 
-	Balance findByUserIdAndFriendId(Integer userId, Integer friendId);
+	@Query("SELECT new dev.pawan.sharemate.response.BalanceDTO(b.friendId, u.name, b.amount) FROM Balance b join User u on u.id=b.friendId WHERE b.userId = :userId")
+	List<BalanceDTO> getBalancesByUserId(@Param("userId") Integer userId);
+
+	@Query("SELECT b FROM Balance b WHERE b.userId = :userId AND b.friendId = :friendId")
+	Balance findByUserIdAndFriendId(@Param("userId") Integer userId, @Param("friendId") Integer friendId);
 
 	@Modifying
 	@Transactional
 	@Query("UPDATE Balance SET amount = amount + :amount WHERE userId = :paidBy and friendId = :borrowedBy")
-	void updateAmount(@Param("paidBy") Integer paidBy, @Param("borrowedBy") Integer borrowedBy,
+	Integer updateAmount(@Param("paidBy") Integer paidBy, @Param("borrowedBy") Integer borrowedBy,
 			@Param("amount") BigDecimal amount);
+
+	@Modifying
+	@Transactional
+	@Query("UPDATE Balance SET amount=0 WHERE (userId = :userId1 and friendId = :userId2) OR (userId = :userId2 and friendId = :userId1)")
+	Integer settleBalance(@Param("userId1") Integer userId1, @Param("userId2") Integer userId2);
 
 }

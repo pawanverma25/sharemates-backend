@@ -22,10 +22,11 @@ public class HuggingFaceService {
 	
 	@Value("${HUGGINGFACE_API_KEY}")
     private String API_KEY;
+	
+	@Value("${HUGGINGFACE_API_URL}")
+	private String url;
 
 	public String huggingFaceAPICall(String desc,List<String> category) {
-		System.out.println("apikey"+API_KEY);
-		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -37,9 +38,6 @@ public class HuggingFaceService {
 		req.setParameters(params);
 
 		HttpEntity<HuggingFaceReqDTO> entity = new HttpEntity<>(req, headers);
-
-		String url = "https://api-inference.huggingface.co/models/joeddav/xlm-roberta-large-xnli";
-
 		ResponseEntity<HuggingFaceDTO> response = restTemplate.postForEntity(
 		    url, entity, HuggingFaceDTO.class
 		);

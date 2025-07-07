@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import dev.pawan.sharemate.enums.FriendStatus;
 import dev.pawan.sharemate.model.Friend;
 import dev.pawan.sharemate.request.FriendRequestDTO;
+import dev.pawan.sharemate.request.SettleExpenseRequestDTO;
 import dev.pawan.sharemate.response.FriendDTO;
 import dev.pawan.sharemate.service.FriendService;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +50,12 @@ public class FriendController {
     public ResponseEntity<List<FriendDTO>> searchFriend(@PathVariable String searchQuery,
             @PathVariable Integer userId) {
         return ResponseEntity.status(HttpStatus.OK).body(friendService.searchFriends(searchQuery, userId));
+    }
+    
+    @PostMapping("/settleFriendExpenses/")
+    public ResponseEntity<Boolean> settleFriendExpenses(@RequestBody SettleExpenseRequestDTO settleExpenseRequestDTO) {
+		Boolean result = friendService.settleFriendExpenses(settleExpenseRequestDTO.getUserId(), settleExpenseRequestDTO.getFriendId());
+		return ResponseEntity.status(HttpStatus.OK).body(result);	
     }
 
 }

@@ -14,5 +14,5 @@ public class ExpenseSplitDTO {
     private Integer expenseId;
     private UserDTO user;
     private BigDecimal amountOwed;
-    private Character paid; 
+    private BigDecimal amountPaid; 
 }
