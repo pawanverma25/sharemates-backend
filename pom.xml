@@ -125,8 +125,16 @@
 			<artifactId>mapstruct-processor</artifactId>
 			<version>1.5.5.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>io.github.flanchanxwo</groupId>
+			<artifactId>expo-push-spring-boot3-starter</artifactId>
+			<version>0.1.0</version>
+		</dependency>
+	    <dependency>
+	        <groupId>me.paulschwarz</groupId>
+	        <artifactId>spring-dotenv</artifactId>
+	    </dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>

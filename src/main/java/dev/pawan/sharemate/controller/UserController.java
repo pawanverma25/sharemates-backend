@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.pawan.sharemate.mapper.UserMapper;
+import dev.pawan.sharemate.model.ExponentPushToken;
 import dev.pawan.sharemate.model.User;
 import dev.pawan.sharemate.request.EmailVerificationRequest;
 import dev.pawan.sharemate.request.LoginRequest;
@@ -142,7 +143,7 @@ public class UserController {
     public ResponseEntity<Map<String, String>> updateUserPreferences(@PathVariable Integer userId,
 			@RequestBody Map<String, String> preferences) {
 		if (userId == null || userId <= 0) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid User ID"));
+			return ResponseEntity.status(HttpStatus.BPAD_REQUEST).body(Map.of("error", "Invalid User ID"));
 		}
 		try {
 			Map<String, String> updatedPreferences = userService.updateUserPreferences(userId, preferences);
@@ -151,6 +152,16 @@ public class UserController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(Map.of("error", "Failed to update preferences: " + e.getMessage()));
+		}
+	}
+    
+    @PostMapping("/updateExpoToken")
+    public ResponseEntity<Boolean> updateExpoToken(@RequestBody ExponentPushToken request) {
+		try {
+			boolean status = userService.updateExpoToken(request);
+			return ResponseEntity.status(HttpStatus.OK).body(status);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 }

@@ -10,8 +10,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.pawan.sharemate.mapper.UserMapper;
+import dev.pawan.sharemate.model.ExponentPushToken;
 import dev.pawan.sharemate.model.Preference;
 import dev.pawan.sharemate.model.User;
+import dev.pawan.sharemate.repository.ExponentPushTokenRepository;
 import dev.pawan.sharemate.repository.PreferenceRepository;
 import dev.pawan.sharemate.repository.UserRepository;
 import dev.pawan.sharemate.request.RegisterRequest;
@@ -30,6 +32,7 @@ public class UserService {
 	private final JwtService jwtService;
 	private final AuthenticationManager authenticationManager;
 	private final PasswordEncoder encoder;
+	private final ExponentPushTokenRepository expoTokenRepo;
 
 	public AuthResponseDTO registerUser(RegisterRequest request) throws Exception {
 		User user = new User();
@@ -124,5 +127,18 @@ public class UserService {
 			preferenceRepo.save(newPreference);
 			return newPreference.getUserPreference();
 		}
+	}
+
+	public boolean updateExpoToken(ExponentPushToken request) {
+	 return expoTokenRepo.findByUserId(request.getUserId())
+				.map(existingToken -> {
+					existingToken.setToken(request.getToken());
+					expoTokenRepo.save(existingToken);
+					return true;
+				}).orElseGet(() -> {
+					expoTokenRepo.save(request);
+					return true;
+				});
+		
 	}
 }

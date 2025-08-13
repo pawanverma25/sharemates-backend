@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import dev.pawan.sharemate.model.ExpenseCategory;
 
-public interface ExpCategoryRepository extends JpaRepository<ExpenseCategory, Integer>{
+public interface ExpenseCategoryRepository extends JpaRepository<ExpenseCategory, Integer>{
 
 	@Query("""
             SELECT distinct category from ExpenseCategory

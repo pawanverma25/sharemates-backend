@@ -11,7 +11,7 @@ import dev.pawan.sharemate.enums.VerificationStatus;
 import dev.pawan.sharemate.model.EmailDetails;
 import dev.pawan.sharemate.model.EmailVerification;
 import dev.pawan.sharemate.model.User;
-import dev.pawan.sharemate.repository.EmailVerificationRepo;
+import dev.pawan.sharemate.repository.EmailVerificationRepository;
 import dev.pawan.sharemate.repository.UserRepository;
 
 @Service
@@ -21,7 +21,7 @@ public class EmailVerificationService {
     private EmailService emailService;
 
     @Autowired
-    private EmailVerificationRepo emailVerificationRepo;
+    private EmailVerificationRepository emailVerificationRepo;
 
     @Autowired
     private UserRepository userRepo;

@@ -1,6 +1,5 @@
 package dev.pawan.sharemate.controller;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -16,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.pawan.sharemate.model.Expense;
-import dev.pawan.sharemate.repository.ExpCategoryRepository;
+import dev.pawan.sharemate.repository.ExpenseCategoryRepository;
 import dev.pawan.sharemate.request.ExpenseRequestDTO;
 import dev.pawan.sharemate.request.ParticipantsDTO;
 import dev.pawan.sharemate.request.SettleExpenseRequestDTO;
@@ -33,7 +32,7 @@ public class ExpenseController {
 
 	private final ExpenseService expenseService;
 	private final ExpenseSplitService expenseSplitService;
-	private final ExpCategoryRepository expCategoryRepository;
+	private final ExpenseCategoryRepository expCategoryRepository;
 	private final HuggingFaceService huggingFaceService;
 
 	@GetMapping("/expenses")

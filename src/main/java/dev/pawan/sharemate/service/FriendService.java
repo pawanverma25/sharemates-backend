@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dev.pawan.sharemate.enums.FriendStatus;
 import dev.pawan.sharemate.model.Friend;
+import dev.pawan.sharemate.model.Notification;
 import dev.pawan.sharemate.repository.FriendRepository;
 import dev.pawan.sharemate.request.FriendRequestDTO;
 import dev.pawan.sharemate.response.FriendDTO;
@@ -19,6 +20,7 @@ public class FriendService {
     private final FriendRepository friendRepository;
     private final BalanceService balanceService;
     private final ExpenseService expenseService;
+    private final NotificationService notificationService;	
 
     public List<FriendDTO> getFriendsByUserId(int userId) {
         return friendRepository.getFriendsByUserId(userId);
@@ -69,6 +71,10 @@ public class FriendService {
 		Boolean isBalanceSettled = balanceService.settleBalance(userId, friendId);
 		Boolean isExpenseSettled = expenseService.settleExpensesByUserIdAndPaidBy(userId, friendId);
 		if (isBalanceSettled && isExpenseSettled) {
+//			notificationService.sendNotification(List.of(
+//				new Notification(userId, "Expenses settled with friend " + friendId, LocalDateTime.now()),
+//				new Notification(friendId, "Expenses settled with user " + userId, LocalDateTime.now())
+//			));
 			return true;
 		} else {
 			throw new IllegalStateException("Failed to settle expenses or balances for user " + userId + " and friend " + friendId);
