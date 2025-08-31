@@ -46,7 +46,7 @@ public class DownloadController {
         userRepository.existsByUsername("lol");
         response.setHeader(headerKey, headerValue);
         for (int i = 0; i < 5; i++) {
-            Map<Integer, Integer> m = IntStream.range(0, 100).boxed()
+            Map<Integer, Integer> m = IntStream.range(0, 2).boxed()
                     .collect(Collectors.toMap(ii -> ii, ii -> ii * 100));
             XSSFSheet sheet = workbook.createSheet();
             Runnable r = () -> WriteIntoSheet(sheet, m);
