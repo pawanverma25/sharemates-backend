@@ -18,17 +18,19 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
+@RequestMapping("/api")
 public class DownloadController {
     private List<Future<?>> futures = new ArrayList<>();
     private ExecutorService exe = Executors.newFixedThreadPool(5);
 
-    @GetMapping("/download")
+    @GetMapping("/keepalive")
     public void download(HttpServletResponse response) {
         XSSFWorkbook workbook = new XSSFWorkbook();
         response.setContentType("application/octet-stream");
@@ -39,7 +41,7 @@ public class DownloadController {
         String headerValue = "attachment; filename=student" + currentDateTime + ".xlsx";
         response.setHeader(headerKey, headerValue);
         for (int i = 0; i < 5; i++) {
-            Map<Integer, Integer> m = IntStream.range(0, 100000).boxed()
+            Map<Integer, Integer> m = IntStream.range(0, 100).boxed()
                     .collect(Collectors.toMap(ii -> ii, ii -> ii * 100));
             XSSFSheet sheet = workbook.createSheet();
             Runnable r = () -> WriteIntoSheet(sheet, m);
