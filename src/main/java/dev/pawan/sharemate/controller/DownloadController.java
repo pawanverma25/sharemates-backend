@@ -30,8 +30,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 public class DownloadController {
-    private List<Future<?>> futures = new ArrayList<>();
-    private ExecutorService exe = Executors.newFixedThreadPool(5);
+//    private List<Future<?>> futures = new ArrayList<>();
+//    private ExecutorService exe = Executors.newFixedThreadPool(5);
     private final UserRepository userRepository;
 
     @GetMapping("/keepalive")
@@ -45,26 +45,27 @@ public class DownloadController {
         String headerValue = "attachment; filename=student" + currentDateTime + ".xlsx";
         userRepository.existsByUsername("lol");
         response.setHeader(headerKey, headerValue);
-        for (int i = 0; i < 5; i++) {
-            Map<Integer, Integer> m = IntStream.range(0, 2).boxed()
+//        for (int i = 0; i < 5; i++) {
+            Map<Integer, Integer> m = IntStream.range(0, 10).boxed()
                     .collect(Collectors.toMap(ii -> ii, ii -> ii * 100));
             XSSFSheet sheet = workbook.createSheet();
-            Runnable r = () -> WriteIntoSheet(sheet, m);
-            // WriteIntoSheet(sheet, m);
-            futures.add(exe.submit(r));
-        }
-        for (Future<?> future : futures) {
-            try {
-                // get() will block until the task is complete
-                future.get();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                System.err.println("Main thread was interrupted while waiting for tasks.");
-            } catch (ExecutionException e) {
-                System.err.println("A task encountered an exception: " + e.getCause());
-            }
-        }
-        exe.shutdown();
+            WriteIntoSheet(sheet, m);
+//            Runnable r = () -> WriteIntoSheet(sheet, m);
+//            // WriteIntoSheet(sheet, m);
+//            futures.add(exe.submit(r));
+//        }
+//        for (Future<?> future : futures) {
+//            try {
+//                // get() will block until the task is complete
+//                future.get();
+//            } catch (InterruptedException e) {
+//                Thread.currentThread().interrupt();
+//                System.err.println("Main thread was interrupted while waiting for tasks.");
+//            } catch (ExecutionException e) {
+//                System.err.println("A task encountered an exception: " + e.getCause());
+//            }
+//        }
+//        exe.shutdown();
         ServletOutputStream outputStream;
         try {
             outputStream = response.getOutputStream();
