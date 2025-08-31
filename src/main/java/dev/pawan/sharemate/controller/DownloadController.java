@@ -21,14 +21,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.pawan.sharemate.repository.UserRepository;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class DownloadController {
     private List<Future<?>> futures = new ArrayList<>();
     private ExecutorService exe = Executors.newFixedThreadPool(5);
+    private final UserRepository userRepository;
 
     @GetMapping("/keepalive")
     public void download(HttpServletResponse response) {
@@ -39,6 +43,7 @@ public class DownloadController {
 
         String headerKey = "Content-Disposition";
         String headerValue = "attachment; filename=student" + currentDateTime + ".xlsx";
+        userRepository.existsByUsername("lol");
         response.setHeader(headerKey, headerValue);
         for (int i = 0; i < 5; i++) {
             Map<Integer, Integer> m = IntStream.range(0, 100).boxed()

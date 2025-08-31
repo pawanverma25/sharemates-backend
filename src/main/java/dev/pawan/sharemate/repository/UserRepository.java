@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     Boolean existsByEmail(String email);
 
-    Boolean existsByUsername(String email);
+    Boolean existsByUsername(String username);
 
     @Query("SELECT u FROM User u WHERE u.username LIKE CONCAT('%', :username, '%') OR u.email LIKE CONCAT('%', :email, '%')")
     List<User> findAllByUsernameOrEmail(@Param("username") String username, @Param("email") String email);
