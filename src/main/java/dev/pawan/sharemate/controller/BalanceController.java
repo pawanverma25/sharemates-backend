@@ -3,8 +3,6 @@ package dev.pawan.sharemate.controller;
 import java.util.List;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +18,6 @@ import dev.pawan.sharemate.service.BalanceService;
 @RequestMapping("/api")
 public class BalanceController {    
 	
-	private Logger logger = LoggerFactory.getLogger(BalanceController.class);
-	
 	@Autowired
 	private BalanceService balanceService;
 	
@@ -31,7 +27,7 @@ public class BalanceController {
 			List<BalanceDTO> res = balanceService.getBalances(userId);
 			return ResponseEntity.status(HttpStatus.OK).body(res);
 		} catch(Exception e) {
-			logger.error("Error while fetching balances: " + ExceptionUtils.getStackTrace(e));
+			System.err.println(ExceptionUtils.getStackTrace(e));
 		}
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	}

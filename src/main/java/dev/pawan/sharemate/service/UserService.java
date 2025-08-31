@@ -132,7 +132,8 @@ public class UserService {
 	public boolean updateExpoToken(ExponentPushToken request) {
 	 return expoTokenRepo.findByUserId(request.getUserId())
 				.map(existingToken -> {
-					existingToken.setToken(request.getToken());
+					if(existingToken.getPushToken().equals(request.getPushToken())) return true;
+					existingToken.setPushToken(request.getPushToken());
 					expoTokenRepo.save(existingToken);
 					return true;
 				}).orElseGet(() -> {

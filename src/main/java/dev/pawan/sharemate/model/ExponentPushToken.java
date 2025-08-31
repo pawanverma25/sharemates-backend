@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 public class ExponentPushToken {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Integer id;
 	
 	@Column(name = "user_id", nullable = false, unique = true)
-	private String UserId;
+	private Integer userId;
 	
-	@Column(name = "token", nullable = false, unique = true)
-	private String token;
+	@Column(name = "token", nullable = false)
+	private String pushToken;
 }

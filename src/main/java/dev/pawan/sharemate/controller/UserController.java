@@ -23,6 +23,7 @@ import dev.pawan.sharemate.request.UserDTO;
 import dev.pawan.sharemate.response.AuthResponseDTO;
 import dev.pawan.sharemate.service.EmailVerificationService;
 import dev.pawan.sharemate.service.UserService;
+import dev.pawan.sharemate.util.ConstantsUtil;
 
 @RestController
 @RequestMapping("/api")
@@ -71,7 +72,7 @@ public class UserController {
             if (token.isPresent()) {
                 User savedUser = userService.getUserDetails(request.getEmail());
                 response = new AuthResponseDTO("Login successful",
-                        UserMapper.INSTANCE.toDto(savedUser), token.get(), 60000, savedUser.getEmailVerified());
+                        UserMapper.INSTANCE.toDto(savedUser), token.get(), ConstantsUtil.JWT_TIME_OUT, savedUser.getEmailVerified());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -143,7 +144,7 @@ public class UserController {
     public ResponseEntity<Map<String, String>> updateUserPreferences(@PathVariable Integer userId,
 			@RequestBody Map<String, String> preferences) {
 		if (userId == null || userId <= 0) {
-			return ResponseEntity.status(HttpStatus.BPAD_REQUEST).body(Map.of("error", "Invalid User ID"));
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "Invalid User ID"));
 		}
 		try {
 			Map<String, String> updatedPreferences = userService.updateUserPreferences(userId, preferences);
@@ -161,6 +162,7 @@ public class UserController {
 			boolean status = userService.updateExpoToken(request);
 			return ResponseEntity.status(HttpStatus.OK).body(status);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}

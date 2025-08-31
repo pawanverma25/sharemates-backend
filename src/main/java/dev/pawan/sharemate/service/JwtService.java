@@ -13,6 +13,7 @@ import javax.crypto.SecretKey;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import dev.pawan.sharemate.util.ConstantsUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -40,7 +41,7 @@ public class JwtService {
                 .add(claims)
                 .subject(email)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 9600000))
+                .expiration(new Date(System.currentTimeMillis() + ConstantsUtil.JWT_TIME_OUT))
                 .and()
                 .signWith(this.getKey())
                 .compact();
