@@ -2,6 +2,7 @@ package dev.pawan.sharemate.model;
 
 import java.time.LocalDateTime;
 
+import dev.pawan.sharemate.request.GroupRequestDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -32,7 +33,10 @@ public class Group {
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdDate = LocalDateTime.now();
-
-//    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-//    private Set<GroupMember> members;
+    
+    public Group(GroupRequestDTO groupRequest) {
+		this.name = groupRequest.getName();
+		this.description = groupRequest.getDescription();
+		this.createdBy = groupRequest.getCreatedBy();		
+	}
 }

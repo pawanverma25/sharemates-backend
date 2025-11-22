@@ -32,12 +32,21 @@ public class GroupService {
         return groupMemberRepository.getGroupMembersByGroupId(groupId);
     }
 
-    public Group createGroup(Group groupRequest) {
-        return groupRepository.save(groupRequest);
+    public Group createGroup(GroupRequestDTO groupRequest) {
+    	Group group = new Group(groupRequest);
+    	Group savedGroup = groupRepository.save(group);
+    	for (Integer memberId : groupRequest.getFriendIdList()) {
+			GroupMember groupMember = new GroupMember();
+			groupMember.setUserId(memberId);
+			groupMember.setGroupId(savedGroup.getId());
+			groupMember.setJoinedAt(group.getCreatedDate());
+			groupMemberRepository.save(groupMember);
+		}
+        return groupRepository.save(group);
     }
 
     public Map<String, String> addMembersToGroup(AddMemberRequestDTO addMemberRequestDTO) {
-        List<Integer> friendList = addMemberRequestDTO.getFriendList();
+        List<Integer> friendList = addMemberRequestDTO.getFriendIdList();
         for (int i = 0; i < friendList.size(); i++) {
             GroupMember groupMember = new GroupMember();
             groupMember.setGroupId(addMemberRequestDTO.getGroupId());

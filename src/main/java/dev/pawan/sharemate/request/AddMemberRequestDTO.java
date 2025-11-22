@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class AddMemberRequestDTO {
 	Integer groupId;
-	List<Integer> friendList;
+	List<Integer> friendIdList;
 }
