@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import dev.pawan.sharemate.config.UserPrinciples;
+import dev.pawan.sharemate.config.UserPrincipal;
 import dev.pawan.sharemate.model.User;
 import dev.pawan.sharemate.repository.UserRepository;
 
@@ -22,7 +22,7 @@ public class SharemateUserDetailsService implements UserDetailsService {
         if (user == null) {
             throw new UsernameNotFoundException(email);
         }
-        return new UserPrinciples(user);
+        return new UserPrincipal(user);
     }
 
 }

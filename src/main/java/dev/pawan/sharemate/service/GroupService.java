@@ -13,6 +13,7 @@ import dev.pawan.sharemate.repository.GroupMemberRepository;
 import dev.pawan.sharemate.repository.GroupRepository;
 import dev.pawan.sharemate.request.AddMemberRequestDTO;
 import dev.pawan.sharemate.request.GroupRequestDTO;
+import dev.pawan.sharemate.response.ExpenseDTO;
 import dev.pawan.sharemate.response.GroupDTO;
 import dev.pawan.sharemate.response.UserDTO;
 import lombok.RequiredArgsConstructor;
@@ -75,9 +76,14 @@ public class GroupService {
         }
     }
 
-	public GroupDTO getGroupDetailsByGroupId(Integer groupId) {
-        Optional<Group> foundGroup = groupRepository.findById(groupId);
-        return foundGroup.map(GroupDTO::new).orElse(null);
+	public List<ExpenseDTO> getGroupExpenses(Integer groupId) {
+		List<ExpenseDTO> expenses = groupRepository.getGroupExpenses(groupId);
+		return expenses;
+	}
+
+	public Object deleteGroup(Integer groupId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

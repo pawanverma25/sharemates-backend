@@ -10,11 +10,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import dev.pawan.sharemate.model.User;
 
 
-public class UserPrinciples implements UserDetails {
+public class UserPrincipal implements UserDetails {
 
-    private User user;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7299259423367986391L;
+	private User user;
 
-    public UserPrinciples(User user) {
+    public UserPrincipal(User user) {
         this.user = user;
     }
 
@@ -32,5 +36,9 @@ public class UserPrinciples implements UserDetails {
     public String getUsername() {
         return user.getEmail();
     }
+    
+    public Integer getUserId() {
+		return this.user.getId();
+	}
 
 }

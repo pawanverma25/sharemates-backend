@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import dev.pawan.sharemate.enums.FriendStatus;
 import dev.pawan.sharemate.model.Friend;
-import dev.pawan.sharemate.model.Notification;
 import dev.pawan.sharemate.repository.FriendRepository;
 import dev.pawan.sharemate.request.FriendRequestDTO;
 import dev.pawan.sharemate.response.FriendDTO;
